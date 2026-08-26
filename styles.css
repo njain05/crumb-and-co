@@ -1,0 +1,329 @@
+/* ===================================================================
+   Crumb & Co. — stylesheet
+   Sections:
+     1. Design tokens (light + dark)
+     2. Base elements
+     3. Buttons
+     4. Top bar
+     5. Hero + open/closed pill
+     6. Section shell
+     7. Fresh Today strip
+     8. What We Do cards
+     9. Visit Us
+    10. Footer
+    11. Motion
+   =================================================================== */
+
+/* ---- 1. DESIGN TOKENS --------------------------------------------- */
+:root{
+  --bg:#FDF6EC;
+  --surface:#FFFCF6;
+  --surface-2:#F7EBDA;
+  --ink:#3B2415;
+  --muted:#6B5344;
+  --accent:#C97B3C;        /* caramel — large text, borders, dots */
+  --accent-ink:#8A4E17;    /* darkened caramel — safe for small text */
+  --accent-strong:#A85F26; /* button fill, paired with --on-accent */
+  --on-accent:#FFFBF5;
+  --sage:#7C8B6F;
+  --sage-ink:#4F5C43;
+  --line:#E0CDB4;
+  --radius:14px;
+  --radius-sm:12px;
+  --shadow:0 6px 20px rgba(59,36,21,.10);
+  --hero-1:#F6DFBF;
+  --hero-2:#EFC9A0;
+  --hero-3:#FDF6EC;
+  --noise-opacity:.35;
+}
+
+/* Deep espresso, not black. */
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#1E1510;
+    --surface:#2A1E16;
+    --surface-2:#33251A;
+    --ink:#F3E7D8;
+    --muted:#C4AE9B;
+    --accent:#E39B58;
+    --accent-ink:#EDAE70;
+    --accent-strong:#E39B58;
+    --on-accent:#241710;
+    --sage:#9CAE8C;
+    --sage-ink:#A8BA97;
+    --line:#4A3527;
+    --shadow:0 6px 20px rgba(0,0,0,.38);
+    --hero-1:#3A2718;
+    --hero-2:#4A3020;
+    --hero-3:#1E1510;
+    --noise-opacity:.22;
+  }
+}
+
+/* ---- 2. BASE ------------------------------------------------------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:17px;
+  line-height:1.65;
+  overflow-x:hidden;
+}
+h1,h2,h3,.display{
+  font-family:Fraunces,"Playfair Display",Georgia,"Times New Roman",serif;
+  font-weight:700;
+  line-height:1.12;
+  letter-spacing:-.01em;
+  margin:0;
+}
+p{margin:0}
+a{color:var(--accent-ink)}
+img,svg{max-width:100%}
+.ta-right{text-align:right}
+
+.container{width:100%;max-width:1100px;margin-inline:auto;padding-inline:20px}
+@media (min-width:760px){ .container{padding-inline:32px} }
+
+/* One visible focus ring, everywhere. */
+:focus-visible{outline:3px solid var(--accent-ink);outline-offset:2px;border-radius:6px}
+
+.skip{
+  position:absolute;left:12px;top:-100px;z-index:100;
+  background:var(--surface);color:var(--ink);border:2px solid var(--accent-ink);
+  padding:12px 16px;border-radius:var(--radius-sm);font-weight:600;text-decoration:none;
+}
+.skip:focus{top:12px}
+
+.visually-hidden{
+  position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
+
+/* ---- 3. BUTTONS ---------------------------------------------------- */
+/* Every tap target is at least 44px tall. */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:46px;padding:11px 18px;
+  border-radius:999px;border:2px solid transparent;
+  font-family:inherit;font-size:16px;font-weight:600;line-height:1.2;
+  text-decoration:none;cursor:pointer;
+  transition:transform .15s ease, background-color .15s ease, border-color .15s ease;
+}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--accent-strong);color:var(--on-accent)}
+.btn-primary:hover{background:var(--accent-ink)}
+.btn-secondary{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-secondary:hover{border-color:var(--accent);background:var(--surface)}
+.btn-sm{min-height:44px;padding:9px 16px;font-size:15px}
+.btn .ico{width:20px;height:20px;flex:none}
+
+/* ---- 4. TOP BAR ---------------------------------------------------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:var(--bg);
+  border-bottom:1px solid var(--line);
+}
+@supports (backdrop-filter:blur(2px)){
+  .topbar{background:color-mix(in srgb, var(--bg) 90%, transparent);backdrop-filter:saturate(140%) blur(8px)}
+}
+.topbar.is-stuck{box-shadow:var(--shadow)}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:60px;padding-block:8px}
+.wordmark{
+  font-family:Fraunces,"Playfair Display",Georgia,serif;font-weight:700;
+  font-size:clamp(19px,4.5vw,23px);color:var(--ink);text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;letter-spacing:-.02em;
+}
+.wordmark .mark{font-size:1.05em;line-height:1}
+.topbar-actions{display:flex;align-items:center;gap:8px}
+.topbar-actions .btn{min-width:46px}
+/* Mobile: collapse to two icon-only buttons. Their accessible names
+   come from the aria-label in the markup. */
+@media (max-width:599px){
+  .topbar-actions .btn-label{display:none}
+  .topbar-actions .btn{padding-inline:0;width:46px}
+}
+
+/* ---- 5. HERO ------------------------------------------------------- */
+.hero{position:relative;isolation:isolate;overflow:hidden;padding-block:clamp(48px,12vw,104px) clamp(40px,9vw,72px);text-align:center}
+.hero::before{
+  content:"";position:absolute;inset:0;z-index:-2;
+  background:
+    radial-gradient(120% 90% at 18% 6%, var(--hero-1) 0%, transparent 62%),
+    radial-gradient(110% 85% at 88% 12%, var(--hero-2) 0%, transparent 58%),
+    linear-gradient(180deg, var(--hero-1) 0%, var(--hero-3) 88%);
+}
+/* Subtle grain, generated inline — no network request, works offline. */
+.hero::after{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  opacity:var(--noise-opacity);mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+@media (prefers-color-scheme: dark){ .hero::after{mix-blend-mode:screen} }
+.hero .eyebrow{
+  font-size:14px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent-ink);margin-bottom:14px;
+}
+.hero h1{font-size:clamp(44px,13vw,86px);margin-bottom:14px}
+.hero .tagline{
+  font-family:Fraunces,"Playfair Display",Georgia,serif;
+  font-size:clamp(19px,5vw,27px);font-style:italic;font-weight:600;
+  color:var(--muted);max-width:19ch;margin-inline:auto;line-height:1.3;
+}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:28px}
+@media (max-width:399px){ .hero-cta .btn{flex:1 1 100%} }
+
+/* Display-case illustration under the hero copy. */
+.hero-art{
+  display:block;width:100%;max-width:640px;height:auto;
+  margin:clamp(28px,6vw,44px) auto -12px;
+  filter:drop-shadow(0 10px 24px rgba(59,36,21,.16));
+}
+@media (prefers-color-scheme: dark){
+  .hero-art{filter:drop-shadow(0 10px 24px rgba(0,0,0,.45))}
+}
+
+/* Open / closed pill — text is written by app.js */
+.pill{
+  display:inline-flex;align-items:center;gap:9px;margin-top:22px;
+  padding:9px 16px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line);
+  box-shadow:var(--shadow);
+  font-size:15px;font-weight:600;color:var(--ink);
+}
+.pill .dot{width:10px;height:10px;border-radius:50%;flex:none;background:var(--muted)}
+.pill.is-open .dot{background:var(--sage);box-shadow:0 0 0 4px rgba(124,139,111,.28)}
+.pill.is-closed .dot{background:var(--accent)}
+.pill .status{font-weight:700}
+.pill .detail{font-weight:400;color:var(--muted)}
+
+/* ---- 6. SECTION SHELL ---------------------------------------------- */
+section{padding-block:clamp(44px,9vw,76px)}
+.section-head{margin-bottom:26px}
+.section-head h2{font-size:clamp(28px,7vw,40px)}
+.section-head .sub{color:var(--muted);margin-top:8px;max-width:56ch}
+
+/* ---- 7. FRESH TODAY ------------------------------------------------ */
+/* The only horizontally scrolling element on the page. */
+.strip{
+  display:flex;gap:12px;margin:0;padding:6px 4px 16px;list-style:none;
+  overflow-x:auto;overscroll-behavior-x:contain;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:thin;scrollbar-color:var(--line) transparent;
+  -webkit-overflow-scrolling:touch;
+}
+.strip::-webkit-scrollbar{height:8px}
+.strip::-webkit-scrollbar-thumb{background:var(--line);border-radius:999px}
+/* Picture cards. The frame keeps a fixed 4:3 box so illustrations and
+   real photographs sit at exactly the same size. */
+.item-card{
+  scroll-snap-align:start;flex:0 0 auto;
+  width:200px;padding:12px 12px 16px;
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--radius);box-shadow:var(--shadow);
+  display:flex;flex-direction:column;
+}
+.item-frame{
+  display:block;border-radius:var(--radius-sm);overflow:hidden;
+  background:
+    radial-gradient(90% 80% at 50% 15%, var(--surface-2) 0%, transparent 70%),
+    linear-gradient(160deg, var(--hero-1) 0%, var(--surface-2) 100%);
+}
+.item-art{display:block;width:100%;aspect-ratio:4 / 3;object-fit:cover}
+.item-name{font-weight:700;margin-top:12px;line-height:1.3}
+.item-note{color:var(--muted);font-size:14px;line-height:1.3;margin-top:2px}
+.strip-note{color:var(--muted);font-size:15px;margin-top:2px}
+
+@media (min-width:760px){
+  .item-card{width:224px}
+}
+
+/* ---- 8. WHAT WE DO ------------------------------------------------- */
+.cards{display:grid;gap:16px;grid-template-columns:1fr}
+@media (min-width:760px){ .cards{grid-template-columns:1fr 1fr;gap:20px} }
+.card{
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:20px;display:flex;flex-direction:column;gap:10px;
+}
+.card-top{display:flex;align-items:flex-start;gap:12px}
+.card-icon{
+  flex:none;width:44px;height:44px;border-radius:12px;
+  display:grid;place-items:center;
+  background:var(--surface-2);color:var(--accent-ink);
+}
+.card-icon svg{width:24px;height:24px}
+
+/* Menu-board entry: title on its own line, then a dotted leader running
+   out to the price. Stacking it this way keeps the look intact at 375px
+   and with any length of title coming from CONFIG. */
+.menu-line{flex:1 1 auto;min-width:0}
+.menu-line h3{font-size:20px}
+.price-row{display:flex;align-items:baseline;margin-top:7px}
+.leader{
+  flex:1 1 auto;min-width:24px;margin-right:10px;
+  border-bottom:2px dotted var(--line);
+}
+.price{flex:none;font-weight:700;color:var(--accent-ink);white-space:nowrap}
+
+.card p{color:var(--muted)}
+.card-link{
+  align-self:flex-start;display:inline-flex;align-items:center;gap:6px;
+  min-height:44px;font-weight:600;text-decoration:none;color:var(--accent-ink);
+  border-bottom:2px solid transparent;
+}
+.card-link:hover{border-bottom-color:var(--accent)}
+.card-link .ico{width:18px;height:18px;flex:none}
+
+/* ---- 9. VISIT US --------------------------------------------------- */
+.visit-grid{display:grid;gap:20px;grid-template-columns:1fr}
+@media (min-width:760px){ .visit-grid{grid-template-columns:1.05fr 1fr;gap:28px;align-items:start} }
+.panel{
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;
+}
+.hours{width:100%;border-collapse:collapse;font-size:16px}
+.hours caption{text-align:left;font-weight:700;font-size:19px;padding-bottom:10px;font-family:Fraunces,"Playfair Display",Georgia,serif}
+.hours th,.hours td{padding:11px 8px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
+.hours tr:last-child th,.hours tr:last-child td{border-bottom:0}
+.hours th{font-weight:500;color:var(--ink)}
+.hours td{text-align:right;color:var(--muted);white-space:nowrap}
+.hours thead th{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+/* Today's row: colour AND weight AND a visible tag — never colour alone. */
+.hours tr.today th,.hours tr.today td{background:var(--surface-2);color:var(--ink);font-weight:700}
+.hours tr.today th{border-left:4px solid var(--accent);padding-left:10px}
+.today-tag{
+  display:inline-block;margin-left:8px;padding:2px 9px;border-radius:999px;
+  background:var(--accent-strong);color:var(--on-accent);
+  font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+}
+.addr{font-style:normal;font-size:18px;line-height:1.6}
+.addr strong{display:block;font-family:Fraunces,"Playfair Display",Georgia,serif;font-size:20px}
+.parking{color:var(--muted);font-size:16px;margin-top:12px}
+.panel .btn{margin-top:16px}
+
+/* ---- 10. FOOTER ---------------------------------------------------- */
+footer{border-top:1px solid var(--line);background:var(--surface);padding-block:32px}
+.foot-grid{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:center;justify-content:space-between}
+.foot-links{display:flex;flex-wrap:wrap;gap:6px 20px;margin:0;padding:0;list-style:none}
+.foot-links a{
+  display:inline-flex;align-items:center;gap:8px;min-height:44px;
+  color:var(--ink);text-decoration:none;font-weight:500;
+}
+.foot-links a:hover{color:var(--accent-ink);text-decoration:underline}
+.foot-links .ico{width:18px;height:18px;flex:none;color:var(--accent-ink)}
+.copyright{color:var(--muted);font-size:15px}
+
+/* ---- 11. MOTION ---------------------------------------------------- */
+/* Hidden from the first paint so there is no flash; app.js adds .in as
+   each section scrolls into view. The <noscript> block in index.html
+   restores visibility when JavaScript is unavailable. */
+.reveal{opacity:0;transform:translateY(18px)}
+.reveal.in{opacity:1;transform:none;transition:opacity .5s ease,transform .5s cubic-bezier(.22,.61,.36,1)}
+
+@media (prefers-reduced-motion: reduce){
+  .reveal,.reveal.in{opacity:1;transform:none;transition:none}
+  .btn{transition:none}
+}
